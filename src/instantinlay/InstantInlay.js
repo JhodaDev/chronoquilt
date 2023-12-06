@@ -23,7 +23,7 @@ const parseDate = (date) => {
   throw new Error('Invalid Date')
 }
 
-class DateJs {
+class InstantInlay {
   constructor (date = new Date()) {
     this.date = parseDate(date)
   }
@@ -125,8 +125,8 @@ class DateJs {
   }
 }
 
-function datejs (date) {
-  return new DateJs(date)
+function instantinlay (date) {
+  return new InstantInlay(date)
 }
 
-export default datejs
+export default instantinlay

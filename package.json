@@ -1,5 +1,5 @@
 {
-  "name": "datejs",
+  "name": "instantinlay",
   "version": "1.0.0",
   "description": "Una biblioteca para manejar fechas en javascript",
   "main": "./dist/index.js",
@@ -14,16 +14,19 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch ./src --experimental-modules index.js",
-    "build": "swc src -d dist"
+    "build:cjs": "swc src -d dist/cjs --config-file swc.cjs.json",
+    "build:esm": "swc src -d dist/esm --config-file swc.esm.json",
+    "build": "npm run build:cjs && npm run build:esm"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JhodaDev/datejs"
+    "url": "git+https://github.com/JhodaDev/datejs.git"
   },
   "keywords": [
     "date",
     "time",
-    "datejs",
+    "InstantInlay",
+    "instantinlay",
     "fecha"
   ],
   "author": "JhodaDev",

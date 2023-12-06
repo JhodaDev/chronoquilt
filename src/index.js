@@ -1,3 +1,3 @@
-import DateJs from './datejs/DateJs.js'
+import InstantInlay from './instantinlay/InstantInlay.js'
 
-export default DateJs
+export default InstantInlay
