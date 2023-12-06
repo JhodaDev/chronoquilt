@@ -1,0 +1,23 @@
+export default {
+  YYYY: (date, zone) => date.getFullYear(),
+  YY: (date, zone) => (date.getFullYear() % 100).toString().padStart(2, '0'),
+  yyyy: (date, zone) => date.getFullYear(),
+  yy: (date, zone) => (date.getFullYear() % 100).toString().padStart(2, '0'),
+  MM: (date, zone) => (date.getMonth() + 1).toString().padStart(2, '0'),
+  M: (date, zone) => date.getMonth() + 1,
+  dd: (date, zone) => date.getDate().toString().padStart(2, '0'),
+  d: (date, zone) => date.getDate(),
+  DD: (date, zone) => date.getDate().toString().padStart(2, '0'),
+  D: (date, zone) => date.getDate(),
+  HH: (date, zone) => date.getHours().toString().padStart(2, '0'),
+  H: (date, zone) => date.getHours(),
+  hh: (date, zone) => date.getHours().toString().padStart(2, '0'),
+  h: (date, zone) => date.getHours(),
+  mm: (date, zone) => date.getMinutes().toString().padStart(2, '0'),
+  m: (date, zone) => date.getMinutes(),
+  ss: (date, zone) => date.getSeconds().toString().padStart(2, '0'),
+  s: (date, zone) => date.getSeconds(),
+  SSS: (date, zone) => date.getMilliseconds().toString().padStart(3, '0'),
+  a: (date, zone) => date.getHours() < 12 ? 'a.m.' : 'p.m.',
+  A: (date, zone) => date.getHours() < 12 ? 'A.M.' : 'P.M.'
+}
