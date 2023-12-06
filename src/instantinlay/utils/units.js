@@ -1,4 +1,4 @@
-export const units = {
+const units = {
   year: 'FullYear',
   month: 'Month',
   day: 'Date',
@@ -6,4 +6,8 @@ export const units = {
   minute: 'Minutes',
   second: 'Seconds',
   millisecond: 'Milliseconds'
+}
+
+module.exports = {
+  units
 }

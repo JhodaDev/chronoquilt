@@ -1,6 +1,6 @@
-import tokens from './utils/tokens.js'
-import { units } from './utils/units.js'
-import util from 'node:util'
+const tokens = require('./utils/tokens')
+const { units } = require('./utils/units')
+const util = require('node:util')
 
 const funcFormat = (date, format, zone) => {
   Object.keys(tokens).forEach(token => {
@@ -129,4 +129,4 @@ function instantinlay (date) {
   return new InstantInlay(date)
 }
 
-export default instantinlay
+module.exports = instantinlay

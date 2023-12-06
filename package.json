@@ -1,10 +1,9 @@
 {
   "name": "instantinlay",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "Una biblioteca para manejar fechas en javascript",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",

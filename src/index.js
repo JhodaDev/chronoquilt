@@ -1,3 +1,3 @@
-import InstantInlay from './instantinlay/InstantInlay.js'
+const InstantInlay = require('./instantinlay/InstantInlay')
 
-export default InstantInlay
+module.exports = InstantInlay
