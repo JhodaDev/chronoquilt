@@ -1,8 +1,17 @@
+/* eslint-disable no-case-declarations */
 const tokens = require('./utils/tokens')
 const { units } = require('./utils/units')
 const util = require('node:util')
+const fs = require('node:fs')
+const path = require('node:path')
 
-const funcFormat = (date, format, zone) => {
+const SECONDS_IN_MILLISENCONDS = 1000
+const MINUTES_IN_MILLISENCONDS = 60000
+const HOURS_IN_MILLISENCONDS = 3600000
+const DAYS_IN_MILLISENCONDS = 86400000
+let ZONES = {}
+
+const formatDate = (date, format, zone) => {
   Object.keys(tokens).forEach(token => {
     format = format.split(token).join(tokens[token](date, zone))
   })
@@ -23,9 +32,17 @@ const parseDate = (date) => {
   throw new Error('Invalid Date')
 }
 
-class InstantInlay {
+(() => {
+  const zones = fs.readFileSync(path.join(__dirname, './zones/zones.json'), 'utf-8')
+  const parsedZones = JSON.parse(zones)
+  ZONES = parsedZones.zones
+})()
+
+class ChronoQuilt {
   constructor (date = new Date()) {
     this.date = parseDate(date)
+    this.zone = ChronoQuilt.zone
+    this.setZone(this.zone)
   }
 
   #adjustDate (amount, unit, add) {
@@ -71,9 +88,60 @@ class InstantInlay {
     }
   }
 
+  setZone (zone) {
+    if (!zone) return
+    ChronoQuilt.zone = zone
+    this.zone = zone
+    const zoneInfo = ZONES[zone]
+
+    if (!zoneInfo) throw new Error('Invalid zone')
+    const { offset } = zoneInfo
+    const [hours = 0, minutes = 0, seconds = 0] = offset.split(':').map(Number)
+
+    if (hours < 0) {
+      const offset = Math.abs(hours)
+      this.date.setHours(this.date.getHours() - offset)
+      this.date.setMinutes(this.date.getMinutes() - minutes)
+      this.date.setSeconds(this.date.getSeconds() - seconds)
+    }
+
+    if (hours > 0) {
+      this.date.setHours(this.date.getHours() + hours)
+      this.date.setMinutes(this.date.getMinutes() + minutes)
+      this.date.setSeconds(this.date.getSeconds() + seconds)
+    }
+
+    return this
+  }
+
+  diff (date, unit) {
+    const diffTime = Math.abs(this.date - date)
+
+    switch (unit) {
+      case 'MILLISENCONDS':
+        return diffTime
+      case 'second':
+        return Math.floor(diffTime / SECONDS_IN_MILLISENCONDS)
+      case 'minute':
+        return Math.floor(diffTime / MINUTES_IN_MILLISENCONDS)
+      case 'hour':
+        return Math.floor(diffTime / HOURS_IN_MILLISENCONDS)
+      case 'day':
+        return Math.floor(diffTime / DAYS_IN_MILLISENCONDS)
+      case 'month':
+        let months
+        months = (this.date.getFullYear() - date.getFullYear()) * 12
+        months -= date.getMonth()
+        months += this.date.getMonth()
+        return months <= 0 ? 0 : months
+      default:
+        throw new Error('Invalid unit')
+    }
+  }
+
   format (format) {
     const date = this.date
-    return funcFormat(date, format)
+    return formatDate(date, format)
   }
 
   add (amount, unit) {
@@ -89,6 +157,14 @@ class InstantInlay {
   startOf (unit) {
     this.#adjustToUnitBoundary(unit, false)
     return this
+  }
+
+  hours () {
+    return this.date.getHours()
+  }
+
+  minutes () {
+    return this.date.getMinutes()
   }
 
   endOf (unit) {
@@ -125,8 +201,8 @@ class InstantInlay {
   }
 }
 
-function instantinlay (date) {
-  return new InstantInlay(date)
+function chronoquilt (date) {
+  return new ChronoQuilt(date)
 }
 
-module.exports = instantinlay
+module.exports = chronoquilt

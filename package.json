@@ -1,5 +1,5 @@
 {
-  "name": "instantinlay",
+  "name": "chronoquilt",
   "version": "1.0.0",
   "description": "Una biblioteca para manejar fechas en javascript",
   "main": "./dist/cjs/index.js",
@@ -15,7 +15,8 @@
     "dev": "node --watch ./src --experimental-modules index.js",
     "build:cjs": "swc src -d dist/cjs --config-file swc.cjs.json",
     "build:esm": "swc src -d dist/esm --config-file swc.esm.json",
-    "build": "npm run build:cjs && npm run build:esm"
+    "build": "npm run build:cjs && npm run build:esm",
+    "tzdb": "node ./src/instantinlay/zones/tzdb.js"
   },
   "repository": {
     "type": "git",
@@ -24,8 +25,7 @@
   "keywords": [
     "date",
     "time",
-    "InstantInlay",
-    "instantinlay",
+    "chronoquilt",
     "fecha"
   ],
   "author": "JhodaDev",

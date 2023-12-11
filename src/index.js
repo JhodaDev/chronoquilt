@@ -1,3 +1,3 @@
-const InstantInlay = require('./instantinlay/InstantInlay')
+const ChronoQuilt = require('./instantinlay/ChronoQuilt')
 
-module.exports = InstantInlay
+module.exports = ChronoQuilt
