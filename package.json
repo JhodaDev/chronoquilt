@@ -1,8 +1,8 @@
 {
   "name": "chronoquilt",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Una biblioteca para manejar fechas en javascript",
-  "main": "./dist/cjs/index.js",
+  "main": "./src/index.js",
   "module": "./dist/esm/index.js",
   "exports": {
     ".": {
@@ -16,7 +16,8 @@
     "build:cjs": "swc src -d dist/cjs --config-file swc.cjs.json",
     "build:esm": "swc src -d dist/esm --config-file swc.esm.json",
     "build": "npm run build:cjs && npm run build:esm",
-    "tzdb": "node ./src/instantinlay/zones/tzdb.js"
+    "tzdb": "node ./src/instantinlay/zones/tzdb.js",
+    "holidays": "node ./src/instantinlay/holidays/2023/co/co.js"
   },
   "repository": {
     "type": "git",

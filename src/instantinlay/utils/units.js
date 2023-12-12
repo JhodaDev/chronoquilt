@@ -1,11 +1,11 @@
 const units = {
-  year: 'FullYear',
-  month: 'Month',
-  day: 'Date',
-  hour: 'Hours',
-  minute: 'Minutes',
-  second: 'Seconds',
-  millisecond: 'Milliseconds'
+  years: 'FullYear',
+  months: 'Month',
+  days: 'Date',
+  hours: 'Hours',
+  minutes: 'Minutes',
+  seconds: 'Seconds',
+  milliseconds: 'Milliseconds'
 }
 
 module.exports = {

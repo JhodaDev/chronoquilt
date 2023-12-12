@@ -38,13 +38,27 @@ const parseDate = (date) => {
   ZONES = parsedZones.zones
 })()
 
+/**
+ * Clase ChronoQuilt para manejar fechas y zonas horarias en JavaScript.
+ */
 class ChronoQuilt {
+  /**
+   * Crea una instancia de ChronoQuilt.
+   * @param {Date|string|number} [date=new Date()] - La fecha inicial para la instancia, puede ser un objeto Date, una cadena o un número.
+   */
   constructor (date = new Date()) {
     this.date = parseDate(date)
     this.zone = ChronoQuilt.zone
     this.setZone(this.zone)
   }
 
+  /**
+   * Método privado para ajustar la fecha actual de la instancia.
+   * @param {number} amount - La cantidad para ajustar.
+   * @param {string} unit - La unidad de tiempo para el ajuste ('day', 'month', 'year', etc.).
+   * @param {boolean} add - Especifica si se debe sumar (true) o restar (false) la cantidad.
+   * @private
+   */
   #adjustDate (amount, unit, add) {
     if (!units[unit]) {
       throw new Error('Invalid unit')
@@ -53,10 +67,15 @@ class ChronoQuilt {
     const dateMethod = `get${units[unit]}`
     const newDateMethod = `set${units[unit]}`
     const newValue = this.date[dateMethod]() + (add ? amount : -amount)
-
     this.date[newDateMethod](newValue)
   }
 
+  /**
+   * Método privado para ajustar la fecha actual a los límites de la unidad de tiempo especificada (por ejemplo, inicio o fin de mes).
+   * @param {string} unit - La unidad de tiempo para el ajuste ('day', 'month', 'year', etc.).
+   * @param {boolean} isEnd - Especifica si se debe ajustar al final (true) o al inicio (false) de la unidad de tiempo.
+   * @private
+   */
   #adjustToUnitBoundary (unit, isEnd) {
     const setToStartOfDay = () => this.date.setHours(0, 0, 0, 0)
     const setToEndOfDay = () => this.date.setHours(23, 59, 59, 999)
@@ -88,6 +107,11 @@ class ChronoQuilt {
     }
   }
 
+  /**
+   * Establece la zona horaria para la instancia.
+   * @param {string} zone - La zona horaria a establecer.
+   * @returns {ChronoQuilt} Retorna la instancia para encadenar métodos.
+   */
   setZone (zone) {
     if (!zone) return
     ChronoQuilt.zone = zone
@@ -114,19 +138,26 @@ class ChronoQuilt {
     return this
   }
 
+  /**
+   * Calcula la diferencia entre la fecha de la instancia y otra fecha, en la unidad especificada.
+   * @param {Date|string|number} date - La fecha con la que comparar.
+   * @param {string} unit - La unidad en la que se desea la diferencia ('seconds', 'minutes', 'hours', etc.).
+   * @returns {number} La diferencia en la unidad especificada.
+   */
   diff (date, unit) {
+    date = new Date(date)
     const diffTime = Math.abs(this.date - date)
 
     switch (unit) {
-      case 'MILLISENCONDS':
+      case 'milliseconds':
         return diffTime
-      case 'second':
+      case 'seconds':
         return Math.floor(diffTime / SECONDS_IN_MILLISENCONDS)
-      case 'minute':
+      case 'minutes':
         return Math.floor(diffTime / MINUTES_IN_MILLISENCONDS)
-      case 'hour':
+      case 'hours':
         return Math.floor(diffTime / HOURS_IN_MILLISENCONDS)
-      case 'day':
+      case 'days':
         return Math.floor(diffTime / DAYS_IN_MILLISENCONDS)
       case 'month':
         let months
@@ -139,68 +170,165 @@ class ChronoQuilt {
     }
   }
 
+  /**
+   * Formatea la fecha actual de la instancia según el formato proporcionado.
+   * @param {string} format - El formato en el que se desea representar la fecha.
+   * @returns {string} La fecha formateada como una cadena.
+  */
   format (format) {
     const date = this.date
     return formatDate(date, format)
   }
 
+  /**
+   * Añade una cantidad específica de tiempo a la fecha de la instancia.
+   * @param {number} amount - La cantidad a añadir.
+   * @param {string} unit - La unidad de tiempo para el ajuste ('seconds', 'minutes', 'hours', etc.).
+   * @returns {ChronoQuilt} Retorna la instancia para encadenar métodos.
+  */
   add (amount, unit) {
     this.#adjustDate(amount, unit, true)
     return this
   }
 
+  /**
+   * Obtiene el año completo de la fecha de la instancia.
+   * @returns {number} El año completo.
+  */
+  getFullYear () {
+    return this.date.getFullYear()
+  }
+
+  /**
+   * Resta una cantidad específica de tiempo de la fecha de la instancia.
+   * @param {number} amount - La cantidad a restar.
+   * @param {string} unit - La unidad de tiempo para el ajuste ('seconds', 'minutes', 'hours', etc.).
+   * @returns {ChronoQuilt} Retorna la instancia para encadenar métodos.
+  */
   subtract (amount, unit) {
     this.#adjustDate(amount, unit, false)
     return this
   }
 
+  /**
+   * Ajusta la fecha de la instancia al inicio de la unidad de tiempo especificada.
+   * @param {string} unit - La unidad de tiempo para el ajuste ('day', 'month', 'year', etc.).
+   * @returns {ChronoQuilt} Retorna la instancia para encadenar métodos.
+  */
   startOf (unit) {
     this.#adjustToUnitBoundary(unit, false)
     return this
   }
 
+  /**
+    * Obtiene las horas de la fecha de la instancia.
+    * @returns {number} Las horas.
+  */
   hours () {
     return this.date.getHours()
   }
 
+  /**
+   * Obtiene los minutos de la fecha de la instancia.
+   * @returns {number} Los minutos.
+  */
   minutes () {
     return this.date.getMinutes()
   }
 
+  /**
+   * Obtiene el mes de la fecha de la instancia.
+   * @returns {number} El mes (0-11).
+  */
+  month () {
+    return this.date.getMonth()
+  }
+
+  /**
+   * Obtiene el día del mes de la fecha de la instancia.
+   * @returns {number} El día del mes.
+  */
+  getDate () {
+    return this.date.getDate()
+  }
+
+  /**
+    * Ajusta la fecha de la instancia al final de la unidad de tiempo especificada.
+    * @param {string} unit - La unidad de tiempo para el ajuste ('day', 'month', 'year', etc.).
+    * @returns {ChronoQuilt} Retorna la instancia para encadenar métodos.
+  */
   endOf (unit) {
     this.#adjustToUnitBoundary(unit, true)
     return this
   }
 
+  /**
+   * Compara si la fecha de la instancia es mayor que otra fecha.
+   * @param {Date|string|number} date - La fecha con la que comparar.
+   * @returns {boolean} Verdadero si la fecha de la instancia es mayor.
+  */
   gt (date) {
     return this.date > date
   }
 
+  /**
+   * Compara si la fecha de la instancia es menor que otra fecha.
+   * @param {Date|string|number} date - La fecha con la que comparar.
+   * @returns {boolean} Verdadero si la fecha de la instancia es menor.
+  */
   lt (date) {
     return this.date < date
   }
 
+  /**
+   * Compara si la fecha de la instancia es igual a otra fecha.
+   * @param {Date|string|number} date - La fecha con la que comparar.
+   * @returns {boolean} Verdadero si las fechas son iguales.
+  */
   eq (date) {
     return this.date.getTime() === date.getTime()
   }
 
+  /**
+   * Compara si la fecha de la instancia es mayor o igual que otra fecha.
+   * @param {Date|string|number} date - La fecha con la que comparar.
+   * @returns {boolean} Verdadero si la fecha de la instancia es mayor o igual.
+  */
   gte (date) {
     return this.date >= date
   }
 
+  /**
+   * Compara si la fecha de la instancia es menor o igual que otra fecha.
+   * @param {Date|string|number} date - La fecha con la que comparar.
+   * @returns {boolean} Verdadero si la fecha de la instancia es menor o igual.
+  */
   lte (date) {
     return this.date <= date
   }
 
+  /**
+   * Obtiene el valor numérico de la fecha de la instancia.
+   * @returns {number} El valor numérico de la fecha.
+   */
   valueOf () {
     return this.date.valueOf()
   }
 
+  /**
+   * Método personalizado para util.inspect de Node.js.
+   * @returns {Date} La fecha de la instancia.
+   */
   [util.inspect.custom] () {
     return this.date
   }
 }
 
+/**
+ * Función para crear una nueva instancia de ChronoQuilt.
+ * @param {Date|string|number} date - La fecha para la nueva instancia.
+ * @returns {ChronoQuilt} Una nueva instancia de ChronoQuilt.
+ */
 function chronoquilt (date) {
   return new ChronoQuilt(date)
 }
