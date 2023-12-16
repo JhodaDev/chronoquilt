@@ -1,6 +1,6 @@
 {
   "name": "chronoquilt",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Una biblioteca para manejar fechas en javascript",
   "main": "./dist/cjs/index.js",
   "exports": {
