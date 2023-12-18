@@ -1,3 +1,3 @@
-const ChronoQuilt = require('./instantinlay/ChronoQuilt')
+const ChronoQuilt = require("./instantinlay/ChronoQuilt");
 
-module.exports = ChronoQuilt
+module.exports = ChronoQuilt;

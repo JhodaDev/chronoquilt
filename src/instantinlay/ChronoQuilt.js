@@ -1,9 +1,9 @@
 /* eslint-disable no-case-declarations */
 const tokens = require('./utils/tokens')
 const { units } = require('./utils/units')
-const util = require('node:util')
-const fs = require('node:fs')
-const path = require('node:path')
+const util = require('util')
+const fs = require('fs')
+const path = require('path')
 
 const SECONDS_IN_MILLISENCONDS = 1000
 const MINUTES_IN_MILLISENCONDS = 60000
