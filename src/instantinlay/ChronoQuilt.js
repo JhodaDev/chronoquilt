@@ -307,12 +307,24 @@ class ChronoQuilt {
     return this.date <= date
   }
 
+  unix () {
+    return Math.floor(this.date.getTime() / 1000)
+  }
+
   /**
    * Obtiene el valor numérico de la fecha de la instancia.
    * @returns {number} El valor numérico de la fecha.
    */
   valueOf () {
     return this.date.valueOf()
+  }
+
+  /**
+   * Obtiene la fecha de la instancia como una cadena ISO 8601.
+   * @returns {string} La fecha como una cadena ISO 8601.
+   */
+  toISOString () {
+    return this.date.toISOString()
   }
 
   /**
