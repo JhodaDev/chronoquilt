@@ -9,6 +9,10 @@ const SECONDS_IN_MILLISENCONDS = 1000
 const MINUTES_IN_MILLISENCONDS = 60000
 const HOURS_IN_MILLISENCONDS = 3600000
 const DAYS_IN_MILLISENCONDS = 86400000
+const CONFIG_OPTIONS = {
+  ZONE: 'zone',
+  DATABASE: 'database'
+}
 let ZONES = {}
 
 const formatDate = (date, format, zone) => {
@@ -50,6 +54,8 @@ class ChronoQuilt {
     this.date = parseDate(date)
     this.zone = ChronoQuilt.zone
     this.setZone(this.zone)
+    this.diff = ChronoQuilt.diff
+    this.unix = ChronoQuilt.unix
   }
 
   /**
@@ -168,6 +174,38 @@ class ChronoQuilt {
       default:
         throw new Error('Invalid unit')
     }
+  }
+
+  toISODB () {
+    if (this.unix === 'add' && this.diff) {
+      this.date.setHours(this.date.getHours() + this.diff)
+      return this
+    }
+
+    if (this.unix === 'substract' && this.diff) {
+      console.log('aqui')
+      this.date.setHours(this.date.getHours() - Math.abs(this.diff))
+      return this
+    }
+  }
+
+  global (config) {
+    const keys = Object.keys(config)
+
+    keys.forEach(key => {
+      switch (key) {
+        case CONFIG_OPTIONS.ZONE:
+          ChronoQuilt.zone = config[key]
+          break
+        case CONFIG_OPTIONS.DATABASE:
+          const database = config[key]
+          ChronoQuilt.diff = database.time
+          ChronoQuilt.unix = database.unix
+          break
+        default:
+          throw new Error('Invalid config option')
+      }
+    })
   }
 
   /**
